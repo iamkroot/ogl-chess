@@ -7,8 +7,12 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const int SCREEN_FPS = 60;
 
-enum class COLOR_MODE {
-    CYAN, MULTI
+enum VIEWPORT_MODE {
+    FULL,
+    HALF_CENTER,
+    HALF_TOP,
+    QUAD,
+    RADAR
 };
 
 /**
