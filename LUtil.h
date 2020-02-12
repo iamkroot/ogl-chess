@@ -33,8 +33,6 @@ void render();
 
 /**
  * @brief Handle keypress events
- * @li Toggles color mode when 'c' is pressed
- * @li Cycles through projection scales when `s` is pressed
  *
  * @param key
  * @param x
