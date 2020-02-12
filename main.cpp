@@ -20,7 +20,9 @@ int main(int argc, char* argv[]) {
     if (!initGL()) {
         return 1;
     }
-    glutKeyboardFunc(handleKeys);
+    if (!loadMedia()) {
+        return 2;
+    }
     glutDisplayFunc(render);
     glutTimerFunc(1000 / SCREEN_FPS, runMainLoop, 0);
     glutMainLoop();

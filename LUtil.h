@@ -22,6 +22,12 @@ enum VIEWPORT_MODE {
 bool initGL();
 
 /**
+ * @brief Loads media to use in program
+ * @return success
+ */
+bool loadMedia();
+
+/**
  * @brief Per frame logic
  */
 void update();
