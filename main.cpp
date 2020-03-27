@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     glutInitContextVersion(2, 1);
     glutInitDisplayMode(GLUT_DOUBLE);
     glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    glutCreateWindow("Learn OpenGL");
+    glutCreateWindow("Chess");
     if (!initGL()) {
         return 1;
     }

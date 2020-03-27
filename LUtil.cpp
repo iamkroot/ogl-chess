@@ -35,8 +35,7 @@ bool loadMedia() {
         if ((i >> 7u & 16u) ^ (i & 16u)) {
             colors[0] = colors[1] = colors[2] = colors[3] = 0xff;
         } else {
-            colors[0] = colors[3] = 0xff;
-            colors[1] = colors[2] = 0x00;
+            colors[0] = colors[1] = colors[2] = colors[3] = 0x00;
         }
     }
     if (!gCheckboardTex.loadTextureFromPixels32(checkerBoard, CB_WIDTH, CB_HEIGHT)) {
