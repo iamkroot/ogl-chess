@@ -7,5 +7,6 @@ add_executable(ogl_chess main.cpp LOpenGL.h GLUtils.cpp GLUtils.h Texture.cpp Te
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
+find_package(GLEW REQUIRED)
 
-target_link_libraries(ogl_chess OpenGL::OpenGL OpenGL::GLU GLUT::GLUT)
+target_link_libraries(ogl_chess OpenGL::OpenGL OpenGL::GLU GLUT::GLUT GLEW::GLEW)
