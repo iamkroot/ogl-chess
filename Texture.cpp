@@ -1,16 +1,16 @@
-#include "LTexture.h"
+#include "Texture.h"
 
-LTexture::LTexture() {
+Texture::Texture() {
     mTextureID = 0;
     mTextureWidth = 0;
     mTextureHeight = 0;
 }
 
-LTexture::~LTexture() {
+Texture::~Texture() {
     freeTexture();
 }
 
-bool LTexture::loadTextureFromPixels32(GLuint* pixels, GLuint width, GLuint height) {
+bool Texture::loadTextureFromPixels32(GLuint* pixels, GLuint width, GLuint height) {
     freeTexture();
     mTextureWidth = width;
     mTextureHeight = height;
@@ -29,7 +29,7 @@ bool LTexture::loadTextureFromPixels32(GLuint* pixels, GLuint width, GLuint heig
     return true;
 }
 
-void LTexture::freeTexture() {
+void Texture::freeTexture() {
     if (mTextureID != 0) {
         glDeleteTextures(1, &mTextureID);
         mTextureID = 0;
@@ -38,7 +38,7 @@ void LTexture::freeTexture() {
     mTextureHeight = 0;
 }
 
-void LTexture::render(GLfloat x, GLfloat y) {
+void Texture::render(GLfloat x, GLfloat y) {
     if (mTextureID == 0) {
         return;
     }
@@ -57,14 +57,14 @@ void LTexture::render(GLfloat x, GLfloat y) {
     glEnd();
 }
 
-GLuint LTexture::getTextureID() {
+GLuint Texture::getTextureID() {
     return mTextureID;
 }
 
-GLuint LTexture::textureWidth() {
+GLuint Texture::textureWidth() {
     return mTextureWidth;
 }
 
-GLuint LTexture::textureHeight() {
+GLuint Texture::textureHeight() {
     return mTextureHeight;
 }

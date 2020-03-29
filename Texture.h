@@ -1,14 +1,14 @@
-#ifndef LTEXTURE_H
-#define LTEXTURE_H
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
 #include "LOpenGL.h"
 #include <iostream>
 
-class LTexture {
+class Texture {
 public:
-    LTexture();
+    Texture();
 
-    ~LTexture();
+    ~Texture();
 
     bool loadTextureFromPixels32(GLuint* pixels, GLuint width, GLuint height);
 
@@ -29,4 +29,4 @@ private:
 };
 
 
-#endif //LTEXTURE_H
+#endif //TEXTURE_H

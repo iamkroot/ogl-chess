@@ -1,5 +1,19 @@
 #include <iostream>
-#include "LUtil.h"
+#include "GLUtils.h"
+#include "Chessboard.h"
+
+Chessboard* board;
+
+void update() {
+
+}
+
+void render() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    board->render(256, 256);
+
+    glutSwapBuffers();
+}
 
 /**
  * @brief Set timer to run every 1000 / SCREEN_FPS ms
@@ -20,12 +34,11 @@ int main(int argc, char* argv[]) {
     if (!initGL()) {
         return 1;
     }
-    if (!loadMedia()) {
-        return 2;
-    }
+    board = new Chessboard(256, 256);
+    board->initBaseBoard();
     glutDisplayFunc(render);
-    glutTimerFunc(1000 / SCREEN_FPS, runMainLoop, 0);
+//    glutTimerFunc(1000 / SCREEN_FPS, runMainLoop, 0);
     glutMainLoop();
-
+    free(board);
     return 0;
 }
