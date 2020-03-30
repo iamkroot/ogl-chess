@@ -3,17 +3,17 @@
 Chessboard::Chessboard(GLint cbWidth, GLint cbHeight) : CBWidth(cbWidth), CBHeight(cbHeight) {}
 
 bool Chessboard::initBaseBoard() {
-    const GLint CBPixelCount = CBWidth * CBHeight;
-    GLuint checkerBoard[CBPixelCount];
-    for (unsigned int i = 0; i < CBPixelCount; ++i) {
+    GLuint checkerBoard[64];
+    for (unsigned int i = 0; i < 64; ++i) {
         auto colors = (GLubyte*) &checkerBoard[i];
-        if ((i >> 7u & 16u) ^ (i & 16u)) {
+        if ((i & 1) ^ ((i & 8) == 8)) {
             colors[0] = colors[1] = colors[2] = colors[3] = 0xff;
         } else {
-            colors[0] = colors[1] = colors[2] = colors[3] = 0x00;
+            colors[0] = colors[1] = colors[2] = 0x00;
+            colors[3] = 0xff;
         }
     }
-    if (!checkBoard.loadTextureFromPixels32(checkerBoard, CBWidth, CBHeight)) {
+    if (!checkBoard.loadTextureFromPixels32(checkerBoard, 8, 8)) {
         std::cerr << "Unable to load texture.\n";
         return false;
     }
