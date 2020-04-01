@@ -27,7 +27,7 @@ void drawBoardBase(GLdouble sideLen, GLdouble thickness) {
     GLuint checkerBoard[64];
     for (unsigned int i = 0; i < 64; ++i) {
         auto colors = (GLubyte*) &checkerBoard[i];
-        if ((i & 1) ^ ((i & 8) == 8)) {
+        if ((i & 1) ^ ((i & 8) >> 3)) {
             colors[0] = colors[1] = colors[2] = colors[3] = 0xff;
         } else {
             colors[0] = colors[1] = colors[2] = 0x00;
@@ -81,13 +81,38 @@ void drawBoardBase(GLdouble sideLen, GLdouble thickness) {
     }
 }
 
+void drawPawn(GLdouble base, GLdouble height) {
+    glRotatef(-90, 1, 0, 0);
+    glutSolidCone(base, height, 50, 50);
+    glPushMatrix();
+    glTranslatef(0, 0, height - base);
+    glutSolidSphere(base, 50, 50);
+    glPopMatrix();
+}
+
 void render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawAxes();
     glColor3f(1.0, 1.0, 1.0);
-    drawBoardBase(3, 0.2);
-
+    double sideLen = 3;
+    drawBoardBase(sideLen, 0.2);
+    double squareSide = (sideLen / 8);
+    for (int i = 0; i < 8; i++) {
+        glPushMatrix();
+        glTranslatef(1.5 - (3 * squareSide / 2), 0.1, 1.5 - (squareSide / 2) - (i * squareSide));
+        double scale = 0.15;
+        drawPawn(0.5 * scale, 3 * scale);
+        glPopMatrix();
+    }
+    for (int i = 0; i < 8; i++) {
+        glPushMatrix();
+        glTranslatef(-1.5 + (3 * squareSide / 2), 0.1, 1.5 - (squareSide / 2) - (i * squareSide));
+        double scale = 0.15;
+        glColor3f(0.2, 0.2, 0.2);
+        drawPawn(0.5 * scale, 3 * scale);
+        glPopMatrix();
+    }
     glutSwapBuffers();
 }
 
