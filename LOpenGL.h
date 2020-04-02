@@ -5,6 +5,7 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <glm/glm.hpp>
 #include <iostream>
 
 #endif //LOPENGL_H
