@@ -73,8 +73,16 @@ void Chessboard::drawPawn(GLdouble base, GLdouble height) {
     glPushMatrix();
     glRotatef(-90, 1, 0, 0);
     glutSolidCone(base, height, 50, 50);
+    glutSolidTorus(base, 3 * base / 5, 50, 50);
+    glTranslatef(0, 0, base);
+    glPushMatrix();
+    glScalef(1, 1, 0.5);
+    glutSolidTorus(4 * base / 5, base / 5, 50, 50);
+    glPopMatrix();
     glTranslatef(0, 0, height - base);
     glutSolidSphere(base, 50, 50);
+    glTranslatef(0, 0, -base);
+    glutSolidTorus(base / 2, base / 10, 50, 50);
     glPopMatrix();
 }
 
