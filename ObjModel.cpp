@@ -34,6 +34,8 @@ void ObjModel::load(const char* path) {
         } else if (line.starts_with("v")) {
             glm::vec3 vertex;
             ss >> vertex.x >> vertex.y >> vertex.z;
+            if (vertex.y < lowestVertex.y)
+                lowestVertex = vertex;
             vertices.push_back(vertex);
         } else if (line.starts_with("f")) {
             char c;

@@ -93,7 +93,7 @@ void Chessboard::drawPawn(GLdouble base, GLdouble height) {
 
 void Chessboard::render(GLdouble x, GLdouble y) {
     renderBaseBoard();
-
+    const float modelScale = 0.0005;
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             auto cell = board[i][j];
@@ -119,7 +119,8 @@ void Chessboard::render(GLdouble x, GLdouble y) {
                 drawPawn(CBWidth / 32, 3 * CBWidth / 20);
             } else {
                 auto model = models[cell.piece];
-                glScalef(0.0005, 0.0005, 0.0005);
+                glTranslatef(0, -model.lowestVertex.y * modelScale, 0);
+                glScalef(modelScale, modelScale, modelScale);
                 model.render();
             }
             glPopMatrix();

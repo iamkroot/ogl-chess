@@ -8,6 +8,7 @@
 class ObjModel {
     std::vector<glm::vec3> vertices, normals;
     std::vector<std::vector<std::pair<int, int>>> triangles;
+
 public:
     ObjModel();
 
@@ -16,6 +17,8 @@ public:
     void load(const char* path);
 
     void render();
+
+    glm::vec3 lowestVertex{0, std::numeric_limits<float>::max(), 0};
 };
 
 
