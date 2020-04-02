@@ -49,6 +49,7 @@ void Chessboard::renderBaseBoard() {
             {0, 1, 3, 2},
             {0, 4, 5, 1}
     };
+    glColor4fv(palette.board_light.rgba);
     // draw top face with checker pattern
     glBindTexture(GL_TEXTURE_2D, checkBoard.getTextureID());
     glBegin(GL_QUADS);
@@ -64,9 +65,9 @@ void Chessboard::renderBaseBoard() {
     glBindTexture(GL_TEXTURE_2D, 0);
 
     // draw other faces normally
+    glColor4fv(palette.board_side.rgba);
     glBegin(GL_QUADS);
     for (int i = 1; i < NUM_FACES; ++i) {
-        glColor3f(0.6, 0.6, 0.6);
         for (int j = 0; j < 4; ++j) {
             glVertex3dv(verts[faces[i][j]]);
         }
@@ -99,7 +100,7 @@ void Chessboard::render(GLdouble x, GLdouble y) {
             auto cell = board[i][j];
             if (cell.empty())
                 continue;
-            auto color = cell.color == PIECE_COLOR::WHITE ? Colors::WHITE_PIECE : Colors::BLACK_PIECE;
+            auto color = cell.color == PIECE_COLOR::WHITE ? palette.piece_light : palette.piece_dark;
 #ifdef DEBUG
             std::cout << i << " " << j << " ";
             std::cout << (cell.color == PIECE_COLOR::WHITE ? "White " : "Black ");
@@ -113,7 +114,7 @@ void Chessboard::render(GLdouble x, GLdouble y) {
             }
 #endif
             glPushMatrix();
-            glColor4fv(&color[0]);
+            glColor4fv(color.rgba);
             translateTo(j + 'a', i + 1);
             if (cell.piece == PIECE::PAWN) {
                 drawPawn(CBWidth / 32, 3 * CBWidth / 20);
@@ -134,27 +135,6 @@ void Chessboard::translateTo(GLchar file, GLshort rank) {
     rank--;
     glTranslatef(a1Pos - (rank * cellWidth), CBHeight / 2,
                  a1Pos - (file * cellWidth));
-}
-
-void Chessboard::renderPawns() {
-    double scale = 0.15;
-    glPushMatrix();
-    translateTo('a', 2);
-    glColor4fv(Colors::WHITE_PIECE);
-    for (int i = 0; i < 8; ++i) {
-        drawPawn(CBWidth / 32, CBWidth * scale);
-        glTranslatef(0, 0, -cellWidth);
-    }
-    glPopMatrix();
-
-    glPushMatrix();
-    translateTo('a', 7);
-    glColor4fv(Colors::BLACK_PIECE);
-    for (int i = 0; i < 8; ++i) {
-        drawPawn(CBWidth / 32, CBWidth * scale);
-        glTranslatef(0, 0, -cellWidth);
-    }
-    glPopMatrix();
 }
 
 void Chessboard::initPositions() {

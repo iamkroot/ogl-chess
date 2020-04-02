@@ -3,7 +3,7 @@ project(ogl_chess)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ogl_chess main.cpp LOpenGL.h GLUtils.cpp GLUtils.h Texture.cpp Texture.h Chessboard.cpp Chessboard.h ObjModel.cpp ObjModel.h)
+add_executable(ogl_chess main.cpp LOpenGL.h GLUtils.cpp GLUtils.h Texture.cpp Texture.h Chessboard.cpp Chessboard.h ObjModel.cpp ObjModel.h Color.h Color.cpp)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 find_package(OpenGL REQUIRED)
