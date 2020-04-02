@@ -4,11 +4,20 @@
 #include <fstream>
 #include <sstream>
 
+ObjModel::ObjModel() = default;
+
+ObjModel::ObjModel(const char* path) {
+    load(path);
+}
+
 void ObjModel::load(const char* path) {
     std::ifstream file(path);
     if (not file) {
         throw std::runtime_error(std::string("Unable to open ") + path);
     }
+    vertices.clear();
+    normals.clear();
+    triangles.clear();
     std::string line, part;
     std::string header;
     while (std::getline(file, line)) {
@@ -40,6 +49,9 @@ void ObjModel::load(const char* path) {
 }
 
 void ObjModel::render() {
+    if (triangles.empty()) {
+        throw std::runtime_error("Object model not loaded");
+    }
     glBegin(GL_TRIANGLES);
     for (const auto &triangle : triangles) {
         for (const auto &vert_norm : triangle) {

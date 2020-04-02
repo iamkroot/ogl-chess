@@ -27,7 +27,7 @@ void render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawAxes();
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(1, 1, 1);
     board->render(0, 0);
     glutSwapBuffers();
 }
@@ -44,7 +44,7 @@ void runMainLoop(int val) {
 int main(int argc, char* argv[]) {
     glutInit(&argc, argv);
     glutInitContextVersion(2, 1);
-    glutInitDisplayMode(GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     glutCreateWindow("Chess");
 
@@ -60,20 +60,23 @@ int main(int argc, char* argv[]) {
     glLoadIdentity();
     gluLookAt(4, 6, 5, 0, 0, 0, 0, 1, 0);
 
-    glClearColor(0.f, 0.f, 0.f, 1.f);
+    glClearColor(0.05f, .3f, 0.5f, 1.f);
 
+#ifdef DEBUG
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(glDebugOutput, nullptr);
+#endif
 
+    glEnable(GL_NORMALIZE);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     GLfloat white[] = {1.0, 1.0, 1.0, 1.0};
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, white);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    glColorMaterial(GL_FRONT, GL_DIFFUSE);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
 
     GLenum err = glGetError();

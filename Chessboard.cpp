@@ -3,6 +3,12 @@
 Chessboard::Chessboard(GLdouble cbWidth, GLdouble cbHeight) : CBWidth(cbWidth), CBHeight(cbHeight) {
     initBaseBoard();
     cellWidth = (CBWidth / 8);
+    models[PIECE::BISHOP] = ObjModel("data/bishop.obj");
+    models[PIECE::KING] = ObjModel("data/king.obj");
+    models[PIECE::KNIGHT] = ObjModel("data/knight.obj");
+    models[PIECE::QUEEN] = ObjModel("data/queen.obj");
+    models[PIECE::ROOK] = ObjModel("data/rook.obj");
+    initPositions();
 }
 
 bool Chessboard::initBaseBoard() {
@@ -43,7 +49,6 @@ void Chessboard::renderBaseBoard() {
             {0, 1, 3, 2},
             {0, 4, 5, 1}
     };
-
     // draw top face with checker pattern
     glBindTexture(GL_TEXTURE_2D, checkBoard.getTextureID());
     glBegin(GL_QUADS);
@@ -88,7 +93,38 @@ void Chessboard::drawPawn(GLdouble base, GLdouble height) {
 
 void Chessboard::render(GLdouble x, GLdouble y) {
     renderBaseBoard();
-    renderPawns();
+
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            auto cell = board[i][j];
+            if (cell.empty())
+                continue;
+            auto color = cell.color == PIECE_COLOR::WHITE ? Colors::WHITE_PIECE : Colors::BLACK_PIECE;
+#ifdef DEBUG
+            std::cout << i << " " << j << " ";
+            std::cout << (cell.color == PIECE_COLOR::WHITE ? "White " : "Black ");
+            switch (cell.piece) {
+                casePrint(PIECE::ROOK)
+                casePrint(PIECE::PAWN)
+                casePrint(PIECE::BISHOP)
+                casePrint(PIECE::KNIGHT)
+                casePrint(PIECE::QUEEN)
+                casePrint(PIECE::KING)
+            }
+#endif
+            glPushMatrix();
+            glColor4fv(&color[0]);
+            translateTo(j + 'a', i + 1);
+            if (cell.piece == PIECE::PAWN) {
+                drawPawn(CBWidth / 32, 3 * CBWidth / 20);
+            } else {
+                auto model = models[cell.piece];
+                glScalef(0.0005, 0.0005, 0.0005);
+                model.render();
+            }
+            glPopMatrix();
+        }
+    }
 }
 
 void Chessboard::translateTo(GLchar file, GLshort rank) {
@@ -103,7 +139,7 @@ void Chessboard::renderPawns() {
     double scale = 0.15;
     glPushMatrix();
     translateTo('a', 2);
-    glColor3f(1, 1, 1);
+    glColor4fv(Colors::WHITE_PIECE);
     for (int i = 0; i < 8; ++i) {
         drawPawn(CBWidth / 32, CBWidth * scale);
         glTranslatef(0, 0, -cellWidth);
@@ -112,10 +148,45 @@ void Chessboard::renderPawns() {
 
     glPushMatrix();
     translateTo('a', 7);
-    glColor3f(0.2, 0.2, 0.2);
+    glColor4fv(Colors::BLACK_PIECE);
     for (int i = 0; i < 8; ++i) {
         drawPawn(CBWidth / 32, CBWidth * scale);
         glTranslatef(0, 0, -cellWidth);
     }
     glPopMatrix();
+}
+
+void Chessboard::initPositions() {
+    for (int i = 0; i < 8; ++i) {
+        board[1][i] = {PIECE::PAWN, PIECE_COLOR::WHITE};
+        board[6][i] = {PIECE::PAWN, PIECE_COLOR::BLACK};
+    }
+    board[0][0] = board[0][7] = {PIECE::ROOK, PIECE_COLOR::WHITE};
+    board[0][1] = board[0][6] = {PIECE::KNIGHT, PIECE_COLOR::WHITE};
+    board[0][2] = board[0][5] = {PIECE::BISHOP, PIECE_COLOR::WHITE};
+    board[0][3] = {PIECE::QUEEN, PIECE_COLOR::WHITE};
+    board[0][4] = {PIECE::KING, PIECE_COLOR::WHITE};
+
+    board[7][0] = board[7][7] = {PIECE::ROOK, PIECE_COLOR::BLACK};
+    board[7][1] = board[7][6] = {PIECE::KNIGHT, PIECE_COLOR::BLACK};
+    board[7][2] = board[7][5] = {PIECE::BISHOP, PIECE_COLOR::BLACK};
+    board[7][3] = {PIECE::QUEEN, PIECE_COLOR::BLACK};
+    board[7][4] = {PIECE::KING, PIECE_COLOR::BLACK};
+
+    for (int i = 2; i < 6; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            board[i][j] = {};
+        }
+    }
+}
+
+Chessboard::Cell::Cell(Chessboard::PIECE piece, Chessboard::PIECE_COLOR color) : piece(piece), color(color) {}
+
+bool Chessboard::Cell::empty() const {
+    return static_cast<int>(piece) == 0;
+}
+
+Chessboard::Cell::Cell() {
+    piece = static_cast<PIECE>(0);
+    color = static_cast<PIECE_COLOR>(0);
 }
