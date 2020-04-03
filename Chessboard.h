@@ -58,8 +58,6 @@ private:
      */
     static void drawPawn(GLdouble base, GLdouble height);
 
-    void renderPawns();
-
 };
 
 

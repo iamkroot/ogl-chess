@@ -9,10 +9,6 @@ Chessboard* board;
 GLboolean isDragging = false;
 GLint dragX, dragY;
 
-void update() {
-
-}
-
 void drawAxes() {
     glBegin(GL_LINES);
     glColor4fv(Colors::RED.rgba);

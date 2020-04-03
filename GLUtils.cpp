@@ -8,7 +8,6 @@ glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei le
 
     std::cout << "---------------" << std::endl;
     std::cout << "Debug message (" << id << "): " << message << std::endl;
-#define casePrint(val) case val: {std::cout << #val; break;}
     std::cout << "Source: ";
     switch (source) {
         casePrint(GL_DEBUG_SOURCE_API)
@@ -18,7 +17,7 @@ glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei le
         casePrint(GL_DEBUG_SOURCE_APPLICATION)
         casePrint(GL_DEBUG_SOURCE_OTHER)
     }
-    std::cout << std::endl << "Type: ";
+    std::cout << "Type: ";
     switch (type) {
         casePrint(GL_DEBUG_TYPE_ERROR)
         casePrint(GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR)
@@ -30,7 +29,7 @@ glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei le
         casePrint(GL_DEBUG_TYPE_POP_GROUP)
         casePrint(GL_DEBUG_TYPE_OTHER)
     }
-    std::cout << std::endl << "Severity: ";
+    std::cout << "Severity: ";
 
     switch (severity) {
         casePrint(GL_DEBUG_SEVERITY_HIGH)
@@ -38,8 +37,6 @@ glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei le
         casePrint(GL_DEBUG_SEVERITY_LOW)
         casePrint(GL_DEBUG_SEVERITY_NOTIFICATION)
     }
-    std::cout << std::endl;
-#undef casePrint
 }
 
 void handleKeys(unsigned char key, int x, int y) {

@@ -31,7 +31,7 @@ bool Chessboard::initBaseBoard() {
 void Chessboard::renderBaseBoard() {
     const int NUM_VERTICES = 8, NUM_FACES = 6;
     GLdouble corner = CBWidth / 2, raise = CBHeight / 2;
-    GLdouble verts[NUM_VERTICES][3] = {
+    glm::vec3 verts[NUM_VERTICES] = {
             {corner,  raise,  corner},
             {corner,  -raise, corner},
             {corner,  raise,  -corner},
@@ -54,13 +54,13 @@ void Chessboard::renderBaseBoard() {
     glBindTexture(GL_TEXTURE_2D, checkBoard.getTextureID());
     glBegin(GL_QUADS);
     glTexCoord2f(0.0, 0.0);
-    glVertex3dv(verts[faces[0][0]]);
+    glVertex3fv(&verts[faces[0][0]].x);
     glTexCoord2f(1.0, 0.0);
-    glVertex3dv(verts[faces[0][1]]);
+    glVertex3fv(&verts[faces[0][1]].x);
     glTexCoord2f(1.0, 1.0);
-    glVertex3dv(verts[faces[0][2]]);
+    glVertex3fv(&verts[faces[0][2]].x);
     glTexCoord2f(0.0, 1.0);
-    glVertex3dv(verts[faces[0][3]]);
+    glVertex3fv(&verts[faces[0][3]].x);
     glEnd();
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -69,7 +69,13 @@ void Chessboard::renderBaseBoard() {
     glBegin(GL_QUADS);
     for (int i = 1; i < NUM_FACES; ++i) {
         for (int j = 0; j < 4; ++j) {
-            glVertex3dv(verts[faces[i][j]]);
+            // calculate vertex normal
+            glm::vec3 edge1 = verts[faces[i][(j + 2) % 4]] - verts[faces[i][(j + 1) % 4]];
+            glm::vec3 edge2 = verts[faces[i][(j + 1) % 4]] - verts[faces[i][j]];
+            glm::vec3 norm = glm::cross(edge1, edge2);
+
+            glNormal3fv(&norm.x);
+            glVertex3fv(&verts[faces[i][j]].x);
         }
     }
     glEnd();
@@ -101,18 +107,6 @@ void Chessboard::render(GLdouble x, GLdouble y) {
             if (cell.empty())
                 continue;
             auto color = cell.color == PIECE_COLOR::WHITE ? palette.piece_light : palette.piece_dark;
-#ifdef DEBUG
-            std::cout << i << " " << j << " ";
-            std::cout << (cell.color == PIECE_COLOR::WHITE ? "White " : "Black ");
-            switch (cell.piece) {
-                casePrint(PIECE::ROOK)
-                casePrint(PIECE::PAWN)
-                casePrint(PIECE::BISHOP)
-                casePrint(PIECE::KNIGHT)
-                casePrint(PIECE::QUEEN)
-                casePrint(PIECE::KING)
-            }
-#endif
             glPushMatrix();
             glColor4fv(color.rgba);
             translateTo(j + 'a', i + 1);
