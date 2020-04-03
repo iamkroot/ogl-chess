@@ -2,8 +2,12 @@
 #include "GLUtils.h"
 #include "Chessboard.h"
 #include "Color.h"
+#include "Camera.h"
 
+Camera camera({5, 5, 0}, {0, 0, 0});
 Chessboard* board;
+GLboolean isDragging = false;
+GLint dragX, dragY;
 
 void update() {
 
@@ -25,6 +29,15 @@ void drawAxes() {
 }
 
 void render() {
+    glMatrixMode(GL_PROJECTION);
+
+    glLoadIdentity();
+    gluPerspective(45.0 * camera.getZoom(), (GLdouble) SCREEN_WIDTH / SCREEN_HEIGHT, 1.0, 64.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    camera.lookAt();
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawAxes();
@@ -33,13 +46,61 @@ void render() {
     glutSwapBuffers();
 }
 
-/**
- * @brief Set timer to run every 1000 / SCREEN_FPS ms
-  */
-void runMainLoop(int val) {
-    update();
-    render();
+void keyboard(unsigned char key, int x, int y) {
+    std::cout << key << std::endl;
+    switch (key) {
+        case 'w':
+            camera.translate(Camera::Direction::FORWARD);
+            break;
+        case 's':
+            camera.translate(Camera::Direction::BACKWARD);
+            break;
+        case 'a':
+            camera.translate(Camera::Direction::LEFT);
+            break;
+        case 'd':
+            camera.translate(Camera::Direction::RIGHT);
+            break;
+        case 'r':
+            camera.reset();
+            break;
+        default:
+            break;
+    }
+    glutPostRedisplay();
+}
 
+void mouseButton(int button, int state, int x, int y) {
+    switch (button) {
+        case GLUT_LEFT_BUTTON: {
+            if (state == GLUT_DOWN) {
+                isDragging = true;
+                dragX = x;
+                dragY = y;
+            } else {
+                isDragging = false;
+            }
+            break;
+        }
+        case 3:
+            camera.zoom(1);
+            break;
+        case 4:
+            camera.zoom(-1);
+            break;
+        default:
+            break;
+    }
+    glutPostRedisplay();
+}
+
+void mouseMotion(int x, int y) {
+    if (isDragging) {
+        camera.rotate(x - dragX, y - dragY);
+        dragX = x;
+        dragY = y;
+        glutPostRedisplay();
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -52,15 +113,9 @@ int main(int argc, char* argv[]) {
     glewExperimental = GL_TRUE;
     glewInit();
     glutDisplayFunc(render);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(45.0, (GLdouble) SCREEN_WIDTH / SCREEN_HEIGHT, 1.0, 64.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(4, 6, 5, 0, 0, 0, 0, 1, 0);
-    glClearColor(palette.bg.rgba[0], palette.bg.rgba[1], palette.bg.rgba[2], palette.bg.rgba[3]);
+    glutKeyboardFunc(keyboard);
+    glutMouseFunc(mouseButton);
+    glutMotionFunc(mouseMotion);
 
 #ifdef DEBUG
     glEnable(GL_DEBUG_OUTPUT);
@@ -83,6 +138,8 @@ int main(int argc, char* argv[]) {
         std::cerr << "Error initializing OpenGL! " << gluErrorString(err) << "\n";
         return 1;
     }
+
+    glClearColor(palette.bg.rgba[0], palette.bg.rgba[1], palette.bg.rgba[2], palette.bg.rgba[3]);
 
     board = new Chessboard(3, 0.2);
 
