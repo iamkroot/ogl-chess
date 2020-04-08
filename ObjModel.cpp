@@ -54,6 +54,12 @@ void ObjModel::render() {
     if (triangles.empty()) {
         throw std::runtime_error("Object model not loaded");
     }
+    if (listIndex) {
+        glCallList(listIndex);
+        return;
+    }
+    listIndex = glGenLists(1);
+    glNewList(listIndex, GL_COMPILE);
     glBegin(GL_TRIANGLES);
     for (const auto &triangle : triangles) {
         for (const auto &vert_norm : triangle) {
@@ -64,4 +70,6 @@ void ObjModel::render() {
         }
     }
     glEnd();
+    glEndList();
+    glCallList(listIndex);
 }

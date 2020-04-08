@@ -36,7 +36,7 @@ private:
     Texture checkBoard;
     GLdouble CBWidth, CBHeight, cellWidth;
     std::map<PIECE, ObjModel> models;
-
+    static GLuint pawnList;
 
     bool initBaseBoard();
 

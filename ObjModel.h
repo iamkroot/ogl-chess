@@ -8,6 +8,7 @@
 class ObjModel {
     std::vector<glm::vec3> vertices, normals;
     std::vector<std::vector<std::pair<int, int>>> triangles;
+    unsigned int listIndex{0};
 
 public:
     ObjModel();

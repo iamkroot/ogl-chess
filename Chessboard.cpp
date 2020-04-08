@@ -1,5 +1,7 @@
 #include "Chessboard.h"
 
+GLuint Chessboard::pawnList = 0;
+
 Chessboard::Chessboard(GLdouble cbWidth, GLdouble cbHeight) : CBWidth(cbWidth), CBHeight(cbHeight) {
     initBaseBoard();
     cellWidth = (CBWidth / 8);
@@ -82,6 +84,12 @@ void Chessboard::renderBaseBoard() {
 }
 
 void Chessboard::drawPawn(GLdouble base, GLdouble height) {
+    if (pawnList) {
+        glCallList(pawnList);
+        return;
+    }
+    pawnList = glGenLists(1);
+    glNewList(pawnList, GL_COMPILE);
     glPushMatrix();
     glRotatef(-90, 1, 0, 0);
     glutSolidCone(base, height, 50, 50);
@@ -96,6 +104,8 @@ void Chessboard::drawPawn(GLdouble base, GLdouble height) {
     glTranslatef(0, 0, -base);
     glutSolidTorus(base / 2, base / 10, 50, 50);
     glPopMatrix();
+    glEndList();
+    glCallList(pawnList);
 }
 
 void Chessboard::render(GLdouble x, GLdouble y) {
