@@ -9,8 +9,7 @@
 #include <iostream>
 #include "Color.h"
 
-#define DEBUG
-#ifdef DEBUG
+#ifndef NDEBUG
 #define casePrint(val) case val: std::cout<<#val<<std::endl; break;
 #endif
 

@@ -7,6 +7,8 @@ typedef struct {
     float rgba[4];
 } Color;
 
+#define fromHex(r, g, b) {(float) r / 256, (float) g / 256, (float) b / 256, 1}
+
 namespace Colors {
     const Color WHITE = {1, 1, 1, 1};
     const Color BLACK = {0, 0, 0, 0};
@@ -17,7 +19,13 @@ namespace Colors {
     const Color SILVER = {0.6, 0.6, 0.6, 1};
     const Color LIGHT_GREY = {0.4, 0.4, 0.4, 1};
     const Color DARK_GREY = {0.1, 0.1, 0.1, 1};
+    const Color BROWN = {0.75390625, 0.6015625, 0.41796875, 1};
+    const Color COFFEE = fromHex(0x4B, 0x37, 0x1C);
+    const Color CHOCOLATE = fromHex(0x23, 0x17, 0x09);
+    const Color TAWNY = fromHex(0x80, 0x47, 0x1C);
 }
+
+#undef fromHex
 
 typedef struct {
     Color bg;

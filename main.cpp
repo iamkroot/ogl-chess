@@ -24,6 +24,37 @@ void drawAxes() {
 
 }
 
+GLuint tableList = 0;
+
+void drawTable(GLfloat sideLen, GLfloat thickness) {
+    if (tableList) {
+        glCallList(tableList);
+        return;
+    }
+    tableList = glGenLists(1);
+    glNewList(tableList, GL_COMPILE);
+    glColor4fv(Colors::TAWNY.rgba);
+    glPushMatrix();
+    glTranslatef(0, -thickness / 2, 0);
+    glScalef(1, thickness / sideLen, 1);
+    glutSolidCube(sideLen);
+    glPopMatrix();
+    glPushMatrix();
+    double halfLen = sideLen / 2, radius = sideLen / 32, height = sideLen;
+    glTranslatef(halfLen - radius, -thickness, halfLen - radius);
+    glRotatef(90, 1, 0, 0);
+    glutSolidCylinder(radius, height, 50, 50);
+    glTranslatef(-sideLen + 2 * radius, 0, 0);
+    glutSolidCylinder(radius, height, 50, 50);
+    glTranslatef(0, -sideLen + 2 * radius, 0);
+    glutSolidCylinder(radius, height, 50, 50);
+    glTranslatef(sideLen - 2 * radius, 0, 0);
+    glutSolidCylinder(radius, height, 50, 50);
+    glPopMatrix();
+    glEndList();
+    glCallList(tableList);
+}
+
 void render() {
     glMatrixMode(GL_PROJECTION);
 
@@ -36,14 +67,13 @@ void render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    drawAxes();
+    drawTable(5, 0.4);
     glColor4fv(Colors::WHITE.rgba);
     board->render(0, 0);
     glutSwapBuffers();
 }
 
 void keyboard(unsigned char key, int x, int y) {
-    std::cout << key << std::endl;
     switch (key) {
         case 'w':
             camera.translate(Camera::Direction::FORWARD);
@@ -146,7 +176,7 @@ int main(int argc, char* argv[]) {
     glutMouseFunc(mouseButton);
     glutMotionFunc(mouseMotion);
 
-#ifdef DEBUG
+#ifndef NDEBUG
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(glDebugOutput, nullptr);
 #endif
