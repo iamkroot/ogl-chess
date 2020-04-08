@@ -5,27 +5,32 @@
 #include <iostream>
 
 class Texture {
+    GLuint texID;
+    GLuint width;
+    GLuint height;
 public:
     Texture();
 
     ~Texture();
 
-    bool loadTextureFromPixels32(GLuint* pixels, GLuint width, GLuint height);
+    /**
+     * @brief Load and create the glTexture
+     * @param pixels The source image
+     * @param width Width of source
+     * @param height Height of source
+     * @return Success
+     */
+    bool load(GLuint* pixels, GLuint width, GLuint height);
 
+    /**
+     * @brief Clear memory used by texture
+     */
     void freeTexture();
 
-    void render(GLfloat x, GLfloat y);
-
-    GLuint getTextureID();
-
-    GLuint textureWidth();
-
-    GLuint textureHeight();
-
-private:
-    GLuint mTextureID;
-    GLuint mTextureWidth;
-    GLuint mTextureHeight;
+    /**
+     * Get ID of texture
+     */
+    GLuint getID();
 };
 
 

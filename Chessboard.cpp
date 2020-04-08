@@ -2,9 +2,9 @@
 
 GLuint Chessboard::pawnList = 0;
 
-Chessboard::Chessboard(GLdouble cbWidth, GLdouble cbHeight) : CBWidth(cbWidth), CBHeight(cbHeight) {
+Chessboard::Chessboard(GLdouble width, GLdouble thickness) : width(width), thickness(thickness) {
     initBaseBoard();
-    cellWidth = (CBWidth / 8);
+    cellWidth = (width / 8);
     models[PIECE::BISHOP] = ObjModel("data/bishop.obj");
     models[PIECE::KING] = ObjModel("data/king.obj");
     models[PIECE::KNIGHT] = ObjModel("data/knight.obj");
@@ -23,7 +23,7 @@ bool Chessboard::initBaseBoard() {
             colors[0] = colors[1] = colors[2] = 0xff;
         colors[3] = 0xff;
     }
-    if (!checkBoard.loadTextureFromPixels32(checkerBoard, 8, 8)) {
+    if (!checkBoard.load(checkerBoard, 8, 8)) {
         std::cerr << "Unable to load texture.\n";
         return false;
     }
@@ -32,7 +32,7 @@ bool Chessboard::initBaseBoard() {
 
 void Chessboard::renderBaseBoard() {
     const int NUM_VERTICES = 8, NUM_FACES = 6;
-    GLdouble corner = CBWidth / 2, raise = CBHeight / 2;
+    GLdouble corner = width / 2, raise = thickness / 2;
     glm::vec3 verts[NUM_VERTICES] = {
             {corner,  raise,  corner},
             {corner,  -raise, corner},
@@ -53,7 +53,7 @@ void Chessboard::renderBaseBoard() {
     };
     glColor4fv(palette.board_light.rgba);
     // draw top face with checker pattern
-    glBindTexture(GL_TEXTURE_2D, checkBoard.getTextureID());
+    glBindTexture(GL_TEXTURE_2D, checkBoard.getID());
     glBegin(GL_QUADS);
     glTexCoord2f(0.0, 0.0);
     glVertex3fv(&verts[faces[0][0]].x);
@@ -108,7 +108,7 @@ void Chessboard::drawPawn(GLdouble base, GLdouble height) {
     glCallList(pawnList);
 }
 
-void Chessboard::render(GLdouble x, GLdouble y) {
+void Chessboard::render() {
     renderBaseBoard();
     const float modelScale = 0.0005;
     for (int i = 0; i < 8; ++i) {
@@ -121,7 +121,7 @@ void Chessboard::render(GLdouble x, GLdouble y) {
             glColor4fv(color.rgba);
             translateTo(j + 'a', i + 1);
             if (cell.piece == PIECE::PAWN) {
-                drawPawn(CBWidth / 32, 3 * CBWidth / 20);
+                drawPawn(width / 32, 3 * width / 20);
             } else {
                 auto model = models[cell.piece];
                 glTranslatef(0, -model.lowestVertex.y * modelScale, 0);
@@ -134,10 +134,10 @@ void Chessboard::render(GLdouble x, GLdouble y) {
 }
 
 void Chessboard::translateTo(GLchar file, GLshort rank) {
-    GLfloat a1Pos = (CBWidth - cellWidth) / 2;
+    GLfloat a1Pos = (width - cellWidth) / 2;
     file = file - 'a';
     rank--;
-    glTranslatef(a1Pos - (rank * cellWidth), CBHeight / 2,
+    glTranslatef(a1Pos - (rank * cellWidth), thickness / 2,
                  a1Pos - (file * cellWidth));
 }
 

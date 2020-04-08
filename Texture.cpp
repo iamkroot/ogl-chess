@@ -1,21 +1,21 @@
 #include "Texture.h"
 
 Texture::Texture() {
-    mTextureID = 0;
-    mTextureWidth = 0;
-    mTextureHeight = 0;
+    texID = 0;
+    width = 0;
+    height = 0;
 }
 
 Texture::~Texture() {
     freeTexture();
 }
 
-bool Texture::loadTextureFromPixels32(GLuint* pixels, GLuint width, GLuint height) {
+bool Texture::load(GLuint* pixels, GLuint width, GLuint height) {
     freeTexture();
-    mTextureWidth = width;
-    mTextureHeight = height;
-    glGenTextures(1, &mTextureID);
-    glBindTexture(GL_TEXTURE_2D, mTextureID);
+    width = width;
+    height = height;
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -32,41 +32,15 @@ bool Texture::loadTextureFromPixels32(GLuint* pixels, GLuint width, GLuint heigh
 }
 
 void Texture::freeTexture() {
-    if (mTextureID != 0) {
-        glDeleteTextures(1, &mTextureID);
-        mTextureID = 0;
+    if (texID != 0) {
+        glDeleteTextures(1, &texID);
+        texID = 0;
     }
-    mTextureWidth = 0;
-    mTextureHeight = 0;
+    width = 0;
+    height = 0;
 }
 
-void Texture::render(GLfloat x, GLfloat y) {
-    if (mTextureID == 0) {
-        return;
-    }
-    glLoadIdentity();
-    glTranslatef(x, y, 0);
-    glBindTexture(GL_TEXTURE_2D, mTextureID);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.f, 0.f);
-    glVertex2f(0.f, 0.f);
-    glTexCoord2f(1.f, 0.f);
-    glVertex2f(mTextureWidth, 0.f);
-    glTexCoord2f(1.f, 1.f);
-    glVertex2f(mTextureWidth, mTextureHeight);
-    glTexCoord2f(0.f, 1.f);
-    glVertex2f(0.f, mTextureHeight);
-    glEnd();
+GLuint Texture::getID() {
+    return texID;
 }
 
-GLuint Texture::getTextureID() {
-    return mTextureID;
-}
-
-GLuint Texture::textureWidth() {
-    return mTextureWidth;
-}
-
-GLuint Texture::textureHeight() {
-    return mTextureHeight;
-}

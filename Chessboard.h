@@ -8,16 +8,26 @@
 class Chessboard {
 
 public:
-    Chessboard(GLdouble cbWidth, GLdouble cbHeight);
+
+    /**
+     * @brief Initialize the chessboard
+     * @param width
+     * @param thickness
+     */
+    Chessboard(GLdouble width, GLdouble thickness);
 
     enum class PIECE {
         BISHOP = 1, KING, KNIGHT, PAWN, QUEEN, ROOK
     };
+
     enum class PIECE_COLOR {
         WHITE, BLACK
     };
 
-    void render(GLdouble x, GLdouble y);
+    /**
+     * @brief Render the board and its pieces
+     */
+    void render();
 
     class Cell {
     public:
@@ -28,18 +38,31 @@ public:
 
         Cell();
 
+        /**
+         * @brief Whether the cell contains a piece
+         */
         [[nodiscard]] bool empty() const;
     };
 
+    /**
+     * @brief Square matrix representing the locations of the pieces
+     */
     Cell board[8][8];
 private:
     Texture checkBoard;
-    GLdouble CBWidth, CBHeight, cellWidth;
+    GLdouble width, thickness, cellWidth;
     std::map<PIECE, ObjModel> models;
     static GLuint pawnList;
 
+    /**
+     * @brief Initialize the checkerboard texture of the board base
+     * @return True if successful
+     */
     bool initBaseBoard();
 
+    /**
+     * @brief Place the pieces on the board, as present at the beginning of a match
+     */
     void initPositions();
 
     /**
@@ -49,6 +72,10 @@ private:
      */
     void translateTo(GLchar file, GLshort rank);
 
+    /**
+     * @brief Render the board base, by applying the texture on top face
+     * @pre initBaseBoard() should have been called
+     */
     void renderBaseBoard();
 
     /**

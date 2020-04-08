@@ -9,7 +9,7 @@
 #include <iostream>
 #include "Color.h"
 
-#ifndef NDEBUG
+#ifndef NDEBUG  // set by CMake
 #define casePrint(val) case val: std::cout<<#val<<std::endl; break;
 #endif
 

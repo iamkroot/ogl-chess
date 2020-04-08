@@ -69,7 +69,7 @@ void render() {
 
     drawTable(5, 0.4);
     glColor4fv(Colors::WHITE.rgba);
-    board->render(0, 0);
+    board->render();
     glutSwapBuffers();
 }
 

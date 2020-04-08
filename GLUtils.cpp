@@ -39,6 +39,3 @@ glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei le
     }
 }
 
-void handleKeys(unsigned char key, int x, int y) {
-
-}

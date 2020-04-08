@@ -3,6 +3,9 @@
 
 #include <cstdint>
 
+/**
+ * @brief Representation of color for easy use with glColor4fv
+ */
 typedef struct {
     float rgba[4];
 } Color;
@@ -27,6 +30,9 @@ namespace Colors {
 
 #undef fromHex
 
+/**
+ * @brief Color palette for the scene
+ */
 typedef struct {
     Color bg;
     Color board_light;
