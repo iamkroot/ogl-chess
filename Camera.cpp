@@ -32,9 +32,6 @@ void Camera::updateVectors() {
     ));
     right = glm::normalize(glm::cross(front, worldUp));
     up = glm::normalize(glm::cross(right, front));
-    std::cout << "F(" << front.x << ", " << front.y << ", " << front.z << ")" << std::endl;
-    std::cout << "R(" << right.x << ", " << right.y << ", " << right.z << ")" << std::endl;
-    std::cout << "U(" << up.x << ", " << up.y << ", " << up.z << ")" << std::endl;
 }
 
 void Camera::lookAt() {

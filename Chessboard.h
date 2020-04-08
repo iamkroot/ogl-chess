@@ -19,11 +19,6 @@ public:
 
     void render(GLdouble x, GLdouble y);
 
-private:
-    Texture checkBoard;
-    GLdouble CBWidth, CBHeight, cellWidth;
-    std::map<PIECE, ObjModel> models;
-
     class Cell {
     public:
         PIECE piece;
@@ -37,6 +32,11 @@ private:
     };
 
     Cell board[8][8];
+private:
+    Texture checkBoard;
+    GLdouble CBWidth, CBHeight, cellWidth;
+    std::map<PIECE, ObjModel> models;
+
 
     bool initBaseBoard();
 
