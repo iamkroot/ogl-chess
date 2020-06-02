@@ -90,6 +90,12 @@ void keyboard(unsigned char key, int x, int y) {
         case 'r':
             camera.reset();
             break;
+        case '[': // ACW roll
+            camera.rotate(-5);
+            break;
+        case ']': // CW roll
+            camera.rotate(5);
+            break;
         default:
             break;
     }

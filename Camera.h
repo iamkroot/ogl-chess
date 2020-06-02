@@ -6,8 +6,10 @@
 class Camera {
     GLfloat yaw;
     GLfloat pitch;
+    GLfloat roll;
     GLfloat initYaw;
     GLfloat initPitch;
+    GLfloat initRoll;
     GLfloat translationSensitivity = 1;
     GLfloat rotationSensitivity = 0.2;
     GLfloat zoomSensitivity = 0.1;
@@ -61,6 +63,12 @@ public:
     void rotate(int x, int y);
 
     /**
+     * @brief Modify the roll of the camera
+     * @param z Rotation about front axis
+     */
+    void rotate(int z);
+
+    /**
      * @brief Change the perspective angle.
      * @param y Vertical offset of the movement
      */
@@ -69,7 +77,7 @@ public:
     /**
      * @brief Get the zoom factor of the camera, to be used for gluPerspective
      */
-    GLfloat getZoom();
+    [[nodiscard]] GLfloat getZoom() const;
 };
 
 #endif //CAMERA_H
