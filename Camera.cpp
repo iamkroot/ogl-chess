@@ -63,8 +63,7 @@ void Camera::reset() {
 void Camera::rotate(int x, int y) {
     angles.yaw -= rotationSensitivity * (float) x;
     angles.pitch += rotationSensitivity * (float) y;
-    angles.yaw = glm::clamp(angles.yaw, initAngles.yaw - HALF_PI, initAngles.yaw + HALF_PI);
-    angles.pitch = glm::clamp(angles.pitch, initAngles.pitch - HALF_PI, initAngles.pitch + HALF_PI);
+    angles.pitch = glm::clamp(angles.pitch, -HALF_PI + 0.001f, HALF_PI);
     updateVectors();
 }
 
