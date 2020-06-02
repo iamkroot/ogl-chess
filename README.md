@@ -17,5 +17,6 @@ An OpenGL C++ implementation of a chess scene.
 ## Usage
 
 * Left click and drag mouse to move the camera around
-* Use `W`/`S`/`A`/`D` keys to move the camera front and right
+* Press `[`/`]` to roll the camera
+* Use `W`/`S`/`A`/`D`/`UP`/`DOWN` keys to move the camera front/right/vertically
 * Scroll mouse to zoom
