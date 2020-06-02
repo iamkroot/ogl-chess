@@ -4,7 +4,7 @@
 #include "Color.h"
 #include "Camera.h"
 
-Camera camera({5, 5, 0}, {0, 0, 0});
+Camera camera({5, 5, 5}, {0, 0, 0});
 Chessboard* board;
 GLboolean isDragging = false;
 GLint dragX, dragY;
@@ -33,12 +33,15 @@ void drawTable(GLfloat sideLen, GLfloat thickness) {
     }
     tableList = glGenLists(1);
     glNewList(tableList, GL_COMPILE);
-    glColor4fv(Colors::TAWNY.rgba);
+
+    // draw top using a squished cube
     glPushMatrix();
     glTranslatef(0, -thickness / 2, 0);
     glScalef(1, thickness / sideLen, 1);
     glutSolidCube(sideLen);
     glPopMatrix();
+
+    // draw legs
     glPushMatrix();
     double halfLen = sideLen / 2, radius = sideLen / 32, height = sideLen;
     glTranslatef(halfLen - radius, -thickness, halfLen - radius);
@@ -55,9 +58,59 @@ void drawTable(GLfloat sideLen, GLfloat thickness) {
     glCallList(tableList);
 }
 
+GLuint chairList = 0;
+
+void drawChair(GLfloat sideLen, GLfloat thickness) {
+    if (chairList) {
+        glCallList(chairList);
+        return;
+    }
+    chairList = glGenLists(1);
+    glNewList(chairList, GL_COMPILE);
+    // base
+    glPushMatrix();
+    glTranslatef(0, -thickness / 2, 0);
+    glScalef(1, thickness / sideLen, 1);
+    glutSolidCube(sideLen);
+    glPopMatrix();
+
+    // legs
+    glPushMatrix();
+    double halfLen = sideLen / 2, radius = sideLen / 24, height = sideLen;
+    glTranslatef(halfLen - radius, -thickness, halfLen - radius);
+    glRotatef(90, 1, 0, 0);
+    glutSolidCylinder(radius, height, 50, 50);
+    glTranslatef(-sideLen + 2 * radius, 0, 0);
+    glutSolidCylinder(radius, height, 50, 50);
+    glTranslatef(0, -sideLen + 2 * radius, 0);
+    glutSolidCylinder(radius, height, 50, 50);
+    glTranslatef(sideLen - 2 * radius, 0, 0);
+    glutSolidCylinder(radius, height, 50, 50);
+    glPopMatrix();
+
+    // back support
+    glPushMatrix();
+    glTranslatef(halfLen - radius, height, halfLen - radius);
+    glRotatef(90, 1, 0, 0);
+    GLfloat del = (sideLen + radius) / 8;
+    for (int i = 0; i < 8; ++i) {
+        glutSolidCylinder(radius, height, 50, 50);
+        glTranslatef(0, -del, 0);
+    }
+    glPopMatrix();
+
+    // back support top
+    glPushMatrix();
+    glTranslatef(halfLen - radius, height + thickness / 2, 0);
+    glScalef(2 * radius / sideLen, thickness / sideLen, 1);
+    glutSolidCube(sideLen);
+    glPopMatrix();
+    glEndList();
+    glCallList(chairList);
+}
+
 void render() {
     glMatrixMode(GL_PROJECTION);
-
     glLoadIdentity();
     gluPerspective(45.0 * camera.getZoom(), (GLdouble) SCREEN_WIDTH / SCREEN_HEIGHT, 1.0, 64.0);
     glMatrixMode(GL_MODELVIEW);
@@ -67,7 +120,27 @@ void render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glPushMatrix();
+    glColor4fv(Colors::BROWN.rgba);
+    glTranslatef(0, -5.4, 0);
+    glScalef(1, 0.000001, 1);
+    glutSolidCube(50);
+    glPopMatrix();
+
+    glColor4fv(Colors::TAWNY.rgba);
     drawTable(5, 0.4);
+
+    glPushMatrix();
+    glTranslatef(5, -1.8, 0);
+    drawChair(3, 0.5);
+    glPopMatrix();
+
+    glPushMatrix();
+    glRotatef(180, 0, 1, 0);
+    glTranslatef(5, -1.8, 0);
+    drawChair(3, 0.5);
+    glPopMatrix();
+
     glColor4fv(Colors::WHITE.rgba);
     board->render();
     glutSwapBuffers();
@@ -95,6 +168,9 @@ void keyboard(unsigned char key, int x, int y) {
             break;
         case ']': // CW roll
             camera.rotate(5);
+            break;
+        case 'q':
+            glutLeaveMainLoop();
             break;
         default:
             break;
