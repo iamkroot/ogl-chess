@@ -102,6 +102,21 @@ void keyboard(unsigned char key, int x, int y) {
     glutPostRedisplay();
 }
 
+
+void special(int key, int x, int y) {
+    switch (key) {
+        case GLUT_KEY_UP:
+            camera.translate(Camera::Direction::UP);
+            break;
+        case GLUT_KEY_DOWN:
+            camera.translate(Camera::Direction::DOWN);
+            break;
+        default:
+            break;
+    }
+    glutPostRedisplay();
+}
+
 void mouseButton(int button, int state, int x, int y) {
     switch (button) {
         case GLUT_LEFT_BUTTON: {
@@ -179,6 +194,7 @@ int main(int argc, char* argv[]) {
     glewInit();
     glutDisplayFunc(render);
     glutKeyboardFunc(keyboard);
+    glutSpecialFunc(special);
     glutMouseFunc(mouseButton);
     glutMotionFunc(mouseMotion);
 
