@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
 void Camera::translate(Camera::Direction direction) {
@@ -28,12 +27,12 @@ void Camera::translate(Camera::Direction direction) {
 
 void Camera::updateVectors() {
     front = glm::normalize(glm::vec3(
-            cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
-            sin(glm::radians(pitch)),
-            sin(glm::radians(yaw)) * cos(glm::radians(pitch))
+            cos(angles.yaw) * cos(angles.pitch),
+            sin(angles.pitch),
+            sin(angles.yaw) * cos(angles.pitch)
     ));
     right = glm::normalize(glm::cross(front, worldUp));
-    auto rolledRight = glm::rotate(right, glm::radians(roll), front);
+    auto rolledRight = glm::rotate(right, angles.roll, front);
     up = glm::normalize(glm::cross(rolledRight, front));
 }
 
@@ -46,35 +45,35 @@ Camera::Camera(const glm::vec3 &position, const glm::vec3 &target, const glm::ve
                                                                                                initPosition(position),
                                                                                                worldUp(worldUp) {
     front = glm::normalize(target - position);
-    initYaw = yaw = glm::degrees(atan2f(front.z, front.x));
-    initPitch = pitch = glm::degrees(asinf(front.y));
-    initRoll = roll = 0;
+    initAngles.yaw = angles.yaw = atan2f(front.z, front.x);
+    initAngles.pitch = angles.pitch = asinf(front.y);
+    initAngles.roll = angles.roll = 0;
     updateVectors();
 }
 
 void Camera::reset() {
     position = initPosition;
-    yaw = initYaw;
-    pitch = initPitch;
-    roll = initRoll;
+    angles.yaw = initAngles.yaw;
+    angles.pitch = initAngles.pitch;
+    angles.roll = initAngles.roll;
     zoomFactor = 1;
     updateVectors();
 }
 
 void Camera::rotate(int x, int y) {
-    yaw -= rotationSensitivity * (float) x;
-    pitch += rotationSensitivity * (float) y;
-    yaw = glm::clamp(yaw, initYaw - 90.f, initYaw + 90.f);
-    pitch = glm::clamp(pitch, initPitch - 90.f, initPitch + 90.f);
+    angles.yaw -= rotationSensitivity * (float) x;
+    angles.pitch += rotationSensitivity * (float) y;
+    angles.yaw = glm::clamp(angles.yaw, initAngles.yaw - HALF_PI, initAngles.yaw + HALF_PI);
+    angles.pitch = glm::clamp(angles.pitch, initAngles.pitch - HALF_PI, initAngles.pitch + HALF_PI);
     updateVectors();
 }
 
 void Camera::rotate(int z) {
-    roll += rotationSensitivity * (float) z;
-    if (roll >= 360)
-        roll -= 360;
-    else if (roll <= -360.f)
-        roll += 360;
+    angles.roll += rotationSensitivity * (float) z;
+    if (angles.roll >= TWO_PI)
+        angles.roll -= TWO_PI;
+    else if (angles.roll <= -TWO_PI)
+        angles.roll += TWO_PI;
     updateVectors();
 }
 

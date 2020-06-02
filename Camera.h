@@ -2,16 +2,11 @@
 #define CAMERA_H
 
 #include "LOpenGL.h"
+#include <glm/gtc/constants.hpp>
 
 class Camera {
-    GLfloat yaw;
-    GLfloat pitch;
-    GLfloat roll;
-    GLfloat initYaw;
-    GLfloat initPitch;
-    GLfloat initRoll;
     GLfloat translationSensitivity = 1;
-    GLfloat rotationSensitivity = 0.2;
+    GLfloat rotationSensitivity = 0.0025;
     GLfloat zoomSensitivity = 0.1;
     GLfloat zoomFactor = 1;
     glm::vec3 position;
@@ -30,6 +25,15 @@ public:
     enum class Direction {
         FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN
     };
+
+    constexpr static auto HALF_PI = glm::half_pi<GLfloat>();
+    constexpr static auto TWO_PI = glm::two_pi<GLfloat>();
+
+    struct Angles {
+        GLfloat yaw;
+        GLfloat pitch;
+        GLfloat roll;
+    } angles, initAngles;
 
     /**
      * @brief Camera class
