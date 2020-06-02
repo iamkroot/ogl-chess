@@ -70,7 +70,7 @@ private:
      * @param file The column name, from 'a' to 'h', inclusive
      * @param rank The row number, from 1 to 8, inclusive
      */
-    void translateTo(GLchar file, GLshort rank);
+    void translateTo(GLchar file, GLshort rank) const;
 
     /**
      * @brief Render the board base, by applying the texture on top face

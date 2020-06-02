@@ -110,7 +110,7 @@ void Chessboard::drawPawn(GLdouble base, GLdouble height) {
 
 void Chessboard::render() {
     renderBaseBoard();
-    const float modelScale = 0.0005;
+    const float modelScale = 0.00045;
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             auto cell = board[i][j];
@@ -133,7 +133,7 @@ void Chessboard::render() {
     }
 }
 
-void Chessboard::translateTo(GLchar file, GLshort rank) {
+void Chessboard::translateTo(GLchar file, GLshort rank) const {
     GLfloat a1Pos = (width - cellWidth) / 2;
     file = file - 'a';
     rank--;
