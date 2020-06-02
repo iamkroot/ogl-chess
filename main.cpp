@@ -150,13 +150,13 @@ void mouseMotion(int x, int y) {
     }
 }
 
-void ByrneFisherSetUp() {
+void ByrneFischerSetUp() {
     for (auto &i : board->board) {
         for (auto &j : i) {
             j = {};
         }
     }
-    board->board[0][4] = {Chessboard::PIECE::KING, Chessboard::PIECE_COLOR::WHITE};
+    board->board[0][5] = {Chessboard::PIECE::KING, Chessboard::PIECE_COLOR::WHITE};
     board->board[7][6] = {Chessboard::PIECE::KING, Chessboard::PIECE_COLOR::BLACK};
     board->board[1][0] = {Chessboard::PIECE::PAWN, Chessboard::PIECE_COLOR::WHITE};
     board->board[1][5] = {Chessboard::PIECE::PAWN, Chessboard::PIECE_COLOR::WHITE};
@@ -170,14 +170,14 @@ void ByrneFisherSetUp() {
     board->board[5][2] = {Chessboard::PIECE::PAWN, Chessboard::PIECE_COLOR::BLACK};
     board->board[5][6] = {Chessboard::PIECE::PAWN, Chessboard::PIECE_COLOR::BLACK};
     board->board[7][0] = {Chessboard::PIECE::ROOK, Chessboard::PIECE_COLOR::BLACK};
-    board->board[7][5] = {Chessboard::PIECE::ROOK, Chessboard::PIECE_COLOR::BLACK};
+    board->board[7][4] = {Chessboard::PIECE::ROOK, Chessboard::PIECE_COLOR::BLACK};
     board->board[0][3] = {Chessboard::PIECE::ROOK, Chessboard::PIECE_COLOR::WHITE};
     board->board[0][7] = {Chessboard::PIECE::ROOK, Chessboard::PIECE_COLOR::WHITE};
     board->board[2][0] = {Chessboard::PIECE::QUEEN, Chessboard::PIECE_COLOR::WHITE};
     board->board[5][1] = {Chessboard::PIECE::QUEEN, Chessboard::PIECE_COLOR::BLACK};
     board->board[2][5] = {Chessboard::PIECE::KNIGHT, Chessboard::PIECE_COLOR::WHITE};
     board->board[2][2] = {Chessboard::PIECE::KNIGHT, Chessboard::PIECE_COLOR::BLACK};
-    board->board[6][4] = {Chessboard::PIECE::BISHOP, Chessboard::PIECE_COLOR::WHITE};
+    board->board[4][2] = {Chessboard::PIECE::BISHOP, Chessboard::PIECE_COLOR::WHITE};
     board->board[3][2] = {Chessboard::PIECE::BISHOP, Chessboard::PIECE_COLOR::WHITE};
     board->board[6][6] = {Chessboard::PIECE::BISHOP, Chessboard::PIECE_COLOR::BLACK};
     board->board[3][6] = {Chessboard::PIECE::BISHOP, Chessboard::PIECE_COLOR::BLACK};
@@ -223,7 +223,7 @@ int main(int argc, char* argv[]) {
     glClearColor(palette.bg.rgba[0], palette.bg.rgba[1], palette.bg.rgba[2], palette.bg.rgba[3]);
 
     board = new Chessboard(3, 0.2);
-    ByrneFisherSetUp();
+    ByrneFischerSetUp();
     glutMainLoop();
     free(board);
     return 0;
